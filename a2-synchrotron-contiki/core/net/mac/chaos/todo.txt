@@ -1,0 +1,58 @@
+	
+
+open
+	Olaf		
+		join
+			* merge
+			* why do we schedule join so often?
+				change pending logic: maybe add current round id to pending question: apps can decide whether it would like to be scheduled once more	
+		max
+		
+		glossy
+		
+		
+		go thourgh all field in the chaos header and make sure they are
+			merges correltly
+			initialzed?
+		
+		performance issues
+		
+				
+		track energy consumption
+		
+		also: how can apps do logging?
+
+		
+		move the defines that the user should set to special place
+			node count, slot length, max slot count, packet size
+	 	glossy like app
+	 		check
+	 		use for testing: do we get a performance like Glossy paper
+		apps
+			need a three phase process for "real" apps
+				if not synced: do a glossy like forwarding
+				once synced: do join
+				once joined: do real app
+				for this: implement sync flag	 
+		add node id to tx
+		tx policy
+		scheduler
+
+
+	Beshr
+		
+		Fix: wait until getting first valid packet before starting slotted behavior (so it corrects for desync. Otherwise, we may lose the first packet)
+		
+		channel hopping
+			later: we should add an extension so we can collect information about bad channels and agree on which ones we blacklist
+		security (sign, crypt)
+			check processing time for sign and verify sign: constant?
+			check processing time for encrypt and decrypt: constant?
+			check: what does the bluetooth platform support here -> so that we know
+		porting + platform abstraction?
+		
+		
+		
+			
+		
+		

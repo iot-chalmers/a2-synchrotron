@@ -1,0 +1,1 @@
+CONTIKI_SOURCEFILES += 2pc.c
