@@ -24,7 +24,6 @@ The resulting duty cycle is 0.5 percent for 1-minute intervals.
 We show that A2 achieves zero losses end-to-end over long experiments, representing millions of data points.
 
 When further adding controlled failures, we show that two-phase commit ensures transaction consistency in A2 while three-phase commit provides liveness at the expense of inconsistency under specific failure scenarios.
-abstract
 
 ## Implementation
 
