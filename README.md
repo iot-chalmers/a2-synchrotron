@@ -9,6 +9,7 @@ This repo hosts the source code of the A2 and Synchrotron protocols that we publ
 Beshr Al Nahas, Simon Duquennoy and Olaf Landsiedel. 2017. 
 "Network-wide Consensus Utilizing the Capture Effect in Low-power Wireless Networks". 
 _In Proceedings of the Conference on Embedded Networked Sensor Systems (ACM SenSys)_.
+[pdf](http://publications.lib.chalmers.se/records/fulltext/251160/local_251160.pdf).
 
 ## Abstract
 
