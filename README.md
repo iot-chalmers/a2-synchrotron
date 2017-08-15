@@ -26,8 +26,13 @@ We show that A2 achieves zero losses end-to-end over long experiments, represent
 When further adding controlled failures, we show that two-phase commit ensures transaction consistency in A2 while three-phase commit provides liveness at the expense of inconsistency under specific failure scenarios.
 abstract
 
+## Implementation
 
-## Running in Cooja
+We implement A2 in C for the Contiki OS targeting simple wireless nodes equipped with a low-power radio such as TelosB and Wsn430 platforms which feature a 16bit MSP430 CPU @ 4 MHz, 10 kB of RAM, 48 kB of firmware storage and CC2420 radio compatible with IEEE 802.15.4.
+
+You can browse the main part of the implementation under [core/net/mac/chaos](./a2-synchrotron-contiki/core/net/mac/chaos/).
+
+### Running in Cooja
 
 To run the two-phase commit sample app in Cooja:
 Go to [2PC](./a2-synchrotron-contiki/apps/chaos/2pc) and compile using:
@@ -37,5 +42,5 @@ make clean && make cooja log=0 printf=1 tx=31 mch=1 pch=0 sec=0 src=2 sync=0 fai
 Then, start Cooja and choose one of the simulation files. 
 For example, this one has [32 nodes](./a2-synchrotron-contiki/apps/chaos/2pc/2pc-app-32nodes.csc).
 
-You can find the other applications in the [Apps folder](./a2-synchrotron-contiki/apps/chaos).
+You can find the other sample applications in the [Apps folder](./a2-synchrotron-contiki/apps/chaos).
 
