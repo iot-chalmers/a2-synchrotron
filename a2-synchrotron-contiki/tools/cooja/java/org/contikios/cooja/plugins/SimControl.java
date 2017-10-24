@@ -48,6 +48,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JRadioButtonMenuItem;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 
@@ -72,6 +73,7 @@ public class SimControl extends VisPlugin implements HasQuickHelp {
 
   private JButton startButton, stopButton;
   private JLabel simulationTime, simulationSpeedup;
+  private JTextField simulationSeed;
 
   private Observer simObserver;
 
@@ -189,10 +191,22 @@ public class SimControl extends VisPlugin implements HasQuickHelp {
     label = new JLabel("?");
     smallPanel.add(label);
     simulationSpeedup = label;
-
+    
     smallPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
     controlPanel.add(smallPanel);
 
+    /* Simulation seed text */
+    simulationSeed=new JTextField(simulation.getRandomSeedString());
+    simulationSeed.addActionListener(setSeedAction);
+    
+    smallPanel = new JPanel();
+    smallPanel.setLayout(new BoxLayout(smallPanel, BoxLayout.X_AXIS));
+    smallPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+    smallPanel.add(new JLabel("Random seed:"));
+    smallPanel.add(simulationSeed);
+    smallPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+    controlPanel.add(smallPanel);
+    
     /* Observe current simulation */
     simulation.addObserver(simObserver = new Observer() {
       public void update(Observable obs, Object obj) {
@@ -235,6 +249,7 @@ public class SimControl extends VisPlugin implements HasQuickHelp {
     if (simulation.isRunning() && !updateLabelTimer.isRunning()) {
       updateLabelTimer.start();
     }
+    simulationSeed.setText(String.valueOf(this.simulation.getRandomSeed()));
 
     /* Update control buttons */
     if (simulation.isRunning()) {
@@ -327,6 +342,18 @@ public class SimControl extends VisPlugin implements HasQuickHelp {
     }
   };
 
+	private Action setSeedAction = new AbstractAction("Set Seed") {
+		public void actionPerformed(ActionEvent e) {
+			try {
+				Long seed = Long.valueOf(simulationSeed.getText().trim());
+				simulation.setRandomSeed(seed);
+				simulationSeed.setText(simulation.getRandomSeedString());
+			} catch (Exception ex) {
+				simulationSeed.setText("!" + simulation.getRandomSeedString());
+			}
+		}
+	};
+	  
   public String getQuickHelp() {
     return "<b>Control Panel</b>" +
         "<p>The control panel controls the simulation. " +
