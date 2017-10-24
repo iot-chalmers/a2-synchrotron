@@ -127,7 +127,7 @@ public class CompileContiki {
   	/* TODO Fix me */
     final MessageList messageDialog;
   	if (compilationOutput == null) {
-  		messageDialog = new MessageList();
+            messageDialog = MessageContainer.createMessageList(true);
   	} else {
   		messageDialog = compilationOutput;
   	}
@@ -203,7 +203,7 @@ public class CompileContiki {
             compileProcess.waitFor();
           } catch (Exception e) {
             messageDialog.addMessage(e.getMessage(), MessageList.ERROR);
-            syncException.setCompilationOutput(new MessageList());
+            syncException.setCompilationOutput(MessageContainer.createMessageList(true));
             syncException.fillInStackTrace();
             return;
           }
@@ -214,7 +214,7 @@ public class CompileContiki {
             if (onFailure != null) {
               onFailure.actionPerformed(null);
             }
-            syncException.setCompilationOutput(new MessageList());
+            syncException.setCompilationOutput(MessageContainer.createMessageList(true));
             syncException.fillInStackTrace();
             return;
           }
@@ -232,7 +232,7 @@ public class CompileContiki {
             if (onFailure != null) {
               onFailure.actionPerformed(null);
             }
-            syncException.setCompilationOutput(new MessageList());
+            syncException.setCompilationOutput(MessageContainer.createMessageList(true));
             syncException.fillInStackTrace();
             return;
           }

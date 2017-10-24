@@ -67,7 +67,7 @@ public class SafeRandom extends Random {
     if(javax.swing.SwingUtilities.isEventDispatchThread()) return;
     
     // Some other threads seems to access the PNRG. This must not happen.
-    //throw new RuntimeException("A random-function was not called from the simulation thread. This can break things!");
+    throw new RuntimeException("A random-function was not called from the simulation thread. This can break things!");
     
   }
   

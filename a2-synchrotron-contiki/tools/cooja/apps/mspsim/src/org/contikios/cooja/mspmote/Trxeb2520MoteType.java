@@ -11,7 +11,9 @@ import org.contikios.cooja.MoteType;
 import org.contikios.cooja.Simulation;
 import org.contikios.cooja.dialogs.CompileContiki;
 import org.contikios.cooja.dialogs.MessageList;
-import org.contikios.cooja.dialogs.MessageList.MessageContainer;
+import org.contikios.cooja.dialogs.MessageListText;
+import org.contikios.cooja.dialogs.MessageListUI;
+import org.contikios.cooja.dialogs.MessageContainer;
 import org.contikios.cooja.interfaces.IPAddress;
 import org.contikios.cooja.interfaces.Mote2MoteRelations;
 import org.contikios.cooja.interfaces.MoteAttributes;
@@ -34,7 +36,7 @@ public class Trxeb2520MoteType extends Exp5438MoteType {
   throws MoteTypeCreationException {
 
     /* If visualized, show compile dialog and let user configure */
-    if (visAvailable) {
+    if (visAvailable && !simulation.isQuickSetup()) {
 
       /* Create unique identifier */
       if (getIdentifier() == null) {
@@ -71,7 +73,7 @@ public class Trxeb2520MoteType extends Exp5438MoteType {
       throw new MoteTypeCreationException("No identifier");
     }
 
-    final MessageList compilationOutput = new MessageList();
+    final MessageList compilationOutput = MessageContainer.createMessageList(visAvailable);
 
     if (getCompileCommands() != null) {
       /* Handle multiple compilation commands one by one */

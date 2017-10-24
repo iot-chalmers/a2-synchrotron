@@ -35,7 +35,9 @@ import java.util.Vector;
 
 import org.contikios.cooja.MoteType.MoteTypeCreationException;
 import org.contikios.cooja.contikimote.ContikiMoteType;
+import org.contikios.cooja.dialogs.MessageContainer;
 import org.contikios.cooja.dialogs.MessageList;
+
 
 /**
  * The purpose of corecomm's is communicating with a compiled Contiki system
@@ -203,7 +205,8 @@ public abstract class CoreComm {
    */
   public static void compileSourceFile(String className)
       throws MoteTypeCreationException {
-    MessageList compilationOutput = new MessageList();
+      /* Try to create a message list with support for GUI - will give not UI if headless */
+    MessageList compilationOutput = MessageContainer.createMessageList(true);
     OutputStream compilationStandardStream = compilationOutput
         .getInputStream(MessageList.NORMAL);
     OutputStream compilationErrorStream = compilationOutput
