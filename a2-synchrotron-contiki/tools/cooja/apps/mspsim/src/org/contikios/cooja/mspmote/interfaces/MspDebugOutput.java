@@ -46,6 +46,8 @@ import org.contikios.cooja.mspmote.MspMote;
 import se.sics.mspsim.core.Memory;
 import se.sics.mspsim.core.MemoryMonitor;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 /**
  * Observes writes to a special (hardcoded) Contiki variable: cooja_debug_ptr.
  * When the pointer is changed, the string that the pointer points to 
@@ -64,11 +66,16 @@ public class MspDebugOutput extends Log {
 
   private final static String CONTIKI_POINTER = "cooja_debug_ptr";
   
+  private final static  String CONTIKI_REQ_SEED_POINTER = "cooja_request_randomseed";
+  private final static  String CONTIKI_SEED_POINTER = "cooja_randomseed";
+  
   private MspMote mote;
   private VarMemory mem;
   
   private String lastLog = null;
   private MemoryMonitor memoryMonitor = null;
+  
+  private MemoryMonitor requestSeedMemoryMonitor = null;
   
   public MspDebugOutput(Mote mote) {
     this.mote = (MspMote) mote;
@@ -84,12 +91,73 @@ public class MspDebugOutput extends Log {
         public void notifyWriteAfter(int adr, int data, Memory.AccessMode mode) {
           String msg = extractString(MspDebugOutput.this.mote.getMemory(), data);
           if (msg != null && msg.length() > 0) {
+            //setRandomSeed(MspDebugOutput.this.mote, (int) mote.getSimulation().getRandomGenerator().nextInt());
             lastLog = "DEBUG: " + msg;
             setChanged();
             notifyObservers(MspDebugOutput.this.mote);
           }
       }
     });
+    
+    setRandomSeedWatchPoint();
+
+  }
+  
+  /** 
+   * Monitor a special (hardcoded) Contiki flag: cooja_request_randomseed
+   * When the variable is set to anything but zero, 
+   * write a random number to the variable cooja_randomseed
+   * and reset the request flag
+   *  */
+  private boolean setRandomSeedWatchPoint() {
+    if (!(mem.variableExists(CONTIKI_SEED_POINTER) && mem.variableExists(CONTIKI_REQ_SEED_POINTER))) {
+      /* Disabled */
+      return false;
+    }
+    
+    this.mote.getCPU().addWatchPoint((int) mem.getVariableAddress(CONTIKI_REQ_SEED_POINTER),
+    		requestSeedMemoryMonitor = new MemoryMonitor.Adapter() {
+        @Override
+        public void notifyWriteAfter(int adr, int data, Memory.AccessMode mode) {
+          if (data != 0) {
+            /* Set the random number in the mote memory */ 
+            long address = MspDebugOutput.this.mem.getVariableAddress(MspDebugOutput.CONTIKI_SEED_POINTER);
+            int seed = (int) MspDebugOutput.this.mote.getSimulation().getRandomGenerator().nextInt();
+            ByteBuffer b = ByteBuffer.allocate(4);
+            b.order(ByteOrder.LITTLE_ENDIAN); /* Compulsory, the initial order of a byte buffer is always BIG_ENDIAN. */
+            b.putInt(seed);
+            MspDebugOutput.this.mote.getMemory().setMemorySegment(address, b.array());
+            
+            /* Turn off the request flag */ 
+            address = MspDebugOutput.this.mem.getVariableAddress(MspDebugOutput.CONTIKI_REQ_SEED_POINTER);
+            b.clear();
+            b.putInt(0);
+            MspDebugOutput.this.mote.getMemory().setMemorySegment(address, b.array());
+
+            setChanged();
+            notifyObservers(MspDebugOutput.this.mote);
+          }
+      }
+    });
+    return true;
+  }
+  
+  public static boolean setRandomSeed(MspMote mote, int seed) {
+    VarMemory mem = new VarMemory(mote.getMemory());
+    if (!mem.variableExists(CONTIKI_SEED_POINTER)) {
+      /* Disabled */
+      return false;
+    }
+    
+    long address = mem.getVariableAddress(CONTIKI_SEED_POINTER);
+    
+    ByteBuffer b = ByteBuffer.allocate(4);
+    b.order(ByteOrder.LITTLE_ENDIAN); // compulsory, the initial order of a byte buffer is always BIG_ENDIAN.
+    b.putInt(seed);
+  		byte[] data = b.array();
+  		
+  		mote.getMemory().setMemorySegment(address, data);
+    return true;
   }
 
   private String extractString(MemoryInterface mem, int address) {
