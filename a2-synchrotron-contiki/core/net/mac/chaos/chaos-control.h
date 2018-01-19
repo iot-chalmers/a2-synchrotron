@@ -49,6 +49,7 @@ typedef struct chaos_app{
   uint16_t slot_length;
   uint16_t max_slots;
   uint8_t requires_node_index;
+  uint32_t round_interval;
   int (*is_pending)(const uint16_t round_count);
   void (*round_begin)(const uint16_t round_count, const uint8_t id);
   void (*round_begin_sniffer)(chaos_header_t* header);
@@ -69,9 +70,9 @@ extern const uint8_t chaos_app_count;
 
 extern const chaos_app_t* const chaos_apps[];
 
-#define CHAOS_APP(name, slot_length, max_slots, requires_node_index, is_pending, round_begin) const chaos_app_t name = {#name, slot_length, max_slots, requires_node_index, is_pending, round_begin, NULL, NULL}
+#define CHAOS_APP(name, slot_length, max_slots, requires_node_index, round_interval, is_pending, round_begin) const chaos_app_t name = {#name, slot_length, max_slots, requires_node_index, round_interval ? round_interval*(RTIMER_SECOND/10) : CHAOS_INTERVAL, is_pending, round_begin, NULL, NULL}
 
-#define CHAOS_SERVICE(name, slot_length, max_slots, requires_node_index, is_pending, round_begin, sniffer_begin, sniffer_end) const chaos_app_t name = {#name, slot_length, max_slots, requires_node_index, is_pending, round_begin, sniffer_begin, sniffer_end}
+#define CHAOS_SERVICE(name, slot_length, max_slots, requires_node_index, is_pending, round_begin, sniffer_begin, sniffer_end) const chaos_app_t name = {#name, slot_length, max_slots, requires_node_index, CHAOS_INTERVAL, is_pending, round_begin, sniffer_begin, sniffer_end}
 
 //you can have CHAOS_APPS only once, just like autostart in Contiki
 #define CHAOS_APPS(...) const chaos_app_t* const chaos_apps[] = {__VA_ARGS__}; \

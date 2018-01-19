@@ -48,7 +48,7 @@ AUTOSTART_PROCESSES(&chaos_rx_test_app_process);
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
-CHAOS_APP(rx_test, RX_TEST_SLOT_LEN, RX_TEST_ROUND_MAX_SLOTS, 0, rx_test_is_pending, round_begin);
+CHAOS_APP(rx_test, RX_TEST_SLOT_LEN, RX_TEST_ROUND_MAX_SLOTS, 0, 0, rx_test_is_pending, round_begin);
 CHAOS_APPS(&rx_test);
 
 static void round_begin(const uint16_t round_count, const uint8_t id){

@@ -49,7 +49,7 @@ static uint16_t round_count_local = 0;
 
 static void round_begin(const uint16_t round_count, const uint8_t app_id);
 
-CHAOS_APP(slotted_test, SLOTTED_TEST_SLOT_LEN, SLOTTED_TEST_ROUND_MAX_SLOTS, 1, slotted_test_is_pending, round_begin);
+CHAOS_APP(slotted_test, SLOTTED_TEST_SLOT_LEN, SLOTTED_TEST_ROUND_MAX_SLOTS, 1, 0, slotted_test_is_pending, round_begin);
 CHAOS_APPS(&join, &slotted_test);
 
 PROCESS(chaos_join_test_app_process, "Chaos Join Test App Process");

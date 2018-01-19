@@ -58,7 +58,7 @@ static uint16_t off_slot;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
-CHAOS_APP(chaos_vote_app, VOTE_SLOT_LEN, VOTE_ROUND_MAX_SLOTS, 1, vote_is_pending, round_begin);
+CHAOS_APP(chaos_vote_app, VOTE_SLOT_LEN, VOTE_ROUND_MAX_SLOTS, 1, 0, vote_is_pending, round_begin);
 #if NETSTACK_CONF_WITH_CHAOS_NODE_DYNAMIC
 #include "join.h"
 CHAOS_APPS(&join, &chaos_vote_app);

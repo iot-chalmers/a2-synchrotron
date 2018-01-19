@@ -57,7 +57,7 @@ static uint16_t off_slot;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
-CHAOS_APP(chaos_3pc_app, THREE_PC_SLOT_LEN, THREE_PC_ROUND_MAX_SLOTS, 1, three_pc_is_pending, round_begin);
+CHAOS_APP(chaos_3pc_app, THREE_PC_SLOT_LEN, THREE_PC_ROUND_MAX_SLOTS, 1, 0, three_pc_is_pending, round_begin);
 #if NETSTACK_CONF_WITH_CHAOS_NODE_DYNAMIC
 #include "join.h"
 CHAOS_APPS(&join, &chaos_3pc_app);

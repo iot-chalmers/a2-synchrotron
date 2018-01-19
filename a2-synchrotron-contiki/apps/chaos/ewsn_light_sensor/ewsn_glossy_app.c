@@ -78,7 +78,7 @@
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 /* App definition */
-CHAOS_APP(chaos_ewsn_glossy_app, EWSN_SLOT_LEN, EWSN_ROUND_MAX_SLOTS, 1, ewsn_is_pending, round_begin);
+CHAOS_APP(chaos_ewsn_glossy_app, EWSN_SLOT_LEN, EWSN_ROUND_MAX_SLOTS, 1, 0, ewsn_is_pending, round_begin);
 CHAOS_APPS(&chaos_ewsn_glossy_app);
 /*---------------------------------------------------------------------------*/
 PROCESS(chaos_ewsn_glossy_app_process, "Chaos EWSN App Process");

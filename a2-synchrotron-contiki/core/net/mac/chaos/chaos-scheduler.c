@@ -68,9 +68,9 @@ void scheduler_init(){
     for(i = 0; i < chaos_app_count; i++){
       if( chaos_apps[i]->is_pending(0) ){
         COOJA_DEBUG_PRINTF("scheduler init: app: %s", chaos_apps[i]->name);
-        next_app = chaos_apps[i];
         next_app_id = i;
-        next_round_begin = CHAOS_INTERVAL;
+        next_app = chaos_apps[i];
+        next_round_begin = current_app ? current_app->round_interval : CHAOS_INTERVAL;
         break;
       }
     }
@@ -80,14 +80,15 @@ void scheduler_init(){
 const chaos_app_t* scheduler_round_begin(const uint16_t round_count, uint8_t* app_id_ptr){
   current_app = next_app;
   current_app_id = next_app_id;
+  next_round_begin = current_app ? current_app->round_interval : CHAOS_INTERVAL;
+
   if( IS_INITIATOR() && chaos_app_count > 0 ){
     int i;
     for(i = 0; i < chaos_app_count; i++){
       if( chaos_apps[i]->is_pending(round_count + 1) ){
-        COOJA_DEBUG_PRINTF("scheduler: current app: %s, next app: %s, start %u", current_app->name, chaos_apps[i]->name, CHAOS_INTERVAL);
-        next_app = chaos_apps[i];
         next_app_id = i;
-        next_round_begin = CHAOS_INTERVAL;
+        next_app = chaos_apps[next_app_id];
+        COOJA_DEBUG_PRINTF("scheduler: current app: %s, next app: %s, start %u", current_app->name, next_app->name, next_round_begin);
         break;
       }
     }
@@ -99,9 +100,8 @@ const chaos_app_t* scheduler_round_begin(const uint16_t round_count, uint8_t* ap
 void scheduler_round_end(){
   if( !IS_INITIATOR() && get_round_synced() ){
     next_app_id = get_next_round_id();
-    next_round_begin = get_next_round_begin();
-    //XXX static round interval
-    next_round_begin = CHAOS_INTERVAL;
+    //XXX static per app round interval
+    next_round_begin = current_app ? current_app->round_interval : CHAOS_INTERVAL;
     if( /*next_round_begin > 0 &&*/ next_app_id < chaos_app_count ){
       next_app = chaos_apps[next_app_id];
       COOJA_DEBUG_PRINTF("scheduler: current app: %s, next app: %s, next begin %u", current_app ? current_app->name : "null", next_app ? next_app->name : "null", next_round_begin);

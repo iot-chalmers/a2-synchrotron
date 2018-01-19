@@ -57,7 +57,7 @@ static uint16_t round_count_local;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
-CHAOS_APP(chaos_collect_slotted_app, COLLECT_SLOTTED_SLOT_LEN, COLLECT_SLOTTED_ROUND_MAX_SLOTS, 1, collect_slotted_is_pending, round_begin);
+CHAOS_APP(chaos_collect_slotted_app, COLLECT_SLOTTED_SLOT_LEN, COLLECT_SLOTTED_ROUND_MAX_SLOTS, 1, 0, collect_slotted_is_pending, round_begin);
 CHAOS_APPS(&chaos_collect_slotted_app);
 
 PROCESS(chaos_collect_slotted_app_process, "Chaos Collect-Slotted App Process");

@@ -56,7 +56,7 @@ static uint16_t round_count_local = 0;
 
 static void round_begin(const uint16_t round_count, const uint8_t id);
 
-CHAOS_APP(chaos_glossy_app, CHAOS_GLOSSY_SLOT_LEN, CHAOS_GLOSSY_ROUND_MAX_SLOTS, 1, glossy_is_pending, round_begin);
+CHAOS_APP(chaos_glossy_app, CHAOS_GLOSSY_SLOT_LEN, CHAOS_GLOSSY_ROUND_MAX_SLOTS, 1, 0, glossy_is_pending, round_begin);
 #if NETSTACK_CONF_WITH_CHAOS_NODE_DYNAMIC
 #include "join.h"
 CHAOS_APPS(&join, &chaos_glossy_app);
