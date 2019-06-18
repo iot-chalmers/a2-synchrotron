@@ -406,7 +406,7 @@ PROCESS_THREAD(chaos_process, ev, data)
         leds_blink();
         if( success ){
           COOJA_DEBUG_LINE();
-          PROCESS_YIELD();
+          PROCESS_WAIT_EVENT_UNTIL(ev == PROCESS_EVENT_POLL);
           COOJA_DEBUG_LINE();
           clock_time_t pre_processing_time = ((round_scheduled_offset * CLOCK_SECOND) / RTIMER_SECOND);
           ctimer_set_absolute(&chaos_pre_processing_ctimer, last_round_clock_time - ROUND_PRE_PROCESSING_TIME, pre_processing_time, chaos_pre_processing, NULL);
